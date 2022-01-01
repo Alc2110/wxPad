@@ -1,5 +1,6 @@
 #include "TextFrame.h"
 
+// menu item IDs
 const int ID_FILE_EXIT = 1000;
 
 TextFrame::TextFrame()
