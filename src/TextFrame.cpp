@@ -8,8 +8,8 @@ const int ID_FILE_SAVE_AS = 1002;
 TextFrame::TextFrame()
     : wxFrame(NULL, -1, "wxPad")
 {
-    text = new wxTextCtrl(this, -1, "Type some text here!",
-                          wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+    text_area = new wxTextCtrl(this, -1, "Type some text here!",
+                               wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
 
     // initialise menu
     wxMenu *menu = new wxMenu();
@@ -41,7 +41,7 @@ void TextFrame::OnSaveAs(wxCommandEvent &event)
         // the user clicked "OK"
         // save the file
         std::string path = SaveDialog->GetPath();
-        text->SaveFile(path);
+        text_area->SaveFile(path);
         // set the title to reflect the file open
         SetTitle(wxString("Edit - ") << SaveDialog->GetFilename());
     }

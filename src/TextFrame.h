@@ -11,6 +11,6 @@ public:
     void OnSaveAs(wxCommandEvent &event);
 
 private:
-    wxTextCtrl *text;
+    wxTextCtrl *text_area;
     DECLARE_EVENT_TABLE();
 };
