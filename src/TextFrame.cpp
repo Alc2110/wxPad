@@ -1,3 +1,4 @@
+#include <wx/fontdlg.h>
 #include "TextFrame.h"
 
 // menu item IDs
@@ -5,24 +6,30 @@ const int ID_FILE_EXIT = 1000;
 const int ID_FILE_SAVE = 1001;
 const int ID_FILE_SAVE_AS = 1002;
 const int ID_FILE_OPEN = 1003;
+const int ID_FORMAT_FONT = 2000;
 
 TextFrame::TextFrame()
     : wxFrame(NULL, -1, "wxPad")
 {
+    // set up main text area
     text_area = new wxTextCtrl(this, -1, "Type some text here!",
                                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
 
-    // initialise menu
-    wxMenu *menu = new wxMenu();
-    menu->Append(ID_FILE_OPEN, "Open");
-    menu->Append(ID_FILE_SAVE, "Save");
-    menu->Append(ID_FILE_SAVE_AS, "Save As");
-    menu->Append(ID_FILE_EXIT, "Exit");
-
-    // add menu to menubar
+    // set up menus
     wxMenuBar *menu_bar = new wxMenuBar();
+    // initialise file menu
+    wxMenu *file_menu = new wxMenu();
+    file_menu->Append(ID_FILE_OPEN, "Open");
+    file_menu->Append(ID_FILE_SAVE, "Save");
+    file_menu->Append(ID_FILE_SAVE_AS, "Save As");
+    file_menu->Append(ID_FILE_EXIT, "Exit");
+    menu_bar->Append(file_menu, "File");
+    // initialise edit menu
+    wxMenu *edit_menu = new wxMenu();
+    edit_menu->Append(ID_FORMAT_FONT, "Font");
+    menu_bar->Append(edit_menu, "Edit");
+    // set up menu bar
     SetMenuBar(menu_bar);
-    menu_bar->Append(menu, "File");
 }
 
 void TextFrame::OnExit(wxCommandEvent &event)
@@ -74,8 +81,27 @@ void TextFrame::OnOpen(wxCommandEvent &event)
     open_dialog->Destroy();
 }
 
+void TextFrame::OnFormatFont(wxCommandEvent &event)
+{
+    // show font dialog
+    wxFontDialog *font_dialog = new wxFontDialog(this);
+
+    if (font_dialog->ShowModal() == wxID_OK)
+    {
+        // the user clicked "OK"
+        // set the main text area font
+        const wxFontData font_data = font_dialog->GetFontData();
+        const wxFont chosen_font = font_data.GetChosenFont();
+        text_area->SetFont(chosen_font);
+    }
+
+    // clean up
+    font_dialog->Destroy();
+}
+
 BEGIN_EVENT_TABLE(TextFrame, wxFrame)
 EVT_MENU(ID_FILE_EXIT, TextFrame::OnExit)
 EVT_MENU(ID_FILE_SAVE_AS, TextFrame::OnSaveAs)
 EVT_MENU(ID_FILE_OPEN, TextFrame::OnOpen)
+EVT_MENU(ID_FORMAT_FONT, TextFrame::OnFormatFont)
 END_EVENT_TABLE()

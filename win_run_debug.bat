@@ -1,1 +1,1 @@
-build\subprojects\Build\wxPad_core\Debug\main.exe
+build\subprojects\Build\wxPad_core\Debug\wxPad.exe
