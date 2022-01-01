@@ -25,9 +25,9 @@ TextFrame::TextFrame()
     file_menu->Append(ID_FILE_EXIT, "Exit");
     menu_bar->Append(file_menu, "File");
     // initialise edit menu
-    wxMenu *edit_menu = new wxMenu();
-    edit_menu->Append(ID_FORMAT_FONT, "Font");
-    menu_bar->Append(edit_menu, "Edit");
+    wxMenu *format_menu = new wxMenu();
+    format_menu->Append(ID_FORMAT_FONT, "Font");
+    menu_bar->Append(format_menu, "Format");
     // set up menu bar
     SetMenuBar(menu_bar);
 }
