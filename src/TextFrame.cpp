@@ -18,3 +18,12 @@ TextFrame::TextFrame()
     SetMenuBar(menu_bar);
     menu_bar->Append(menu, "File");
 }
+
+void TextFrame::OnExit(wxCommandEvent &event)
+{
+    Destroy();
+}
+
+BEGIN_EVENT_TABLE(TextFrame, wxFrame)
+EVT_MENU(ID_FILE_EXIT, TextFrame::OnExit)
+END_EVENT_TABLE()
