@@ -8,6 +8,7 @@ public:
     TextFrame();
 
     void OnExit(wxCommandEvent &event);
+    void OnSaveAs(wxCommandEvent &event);
 
 private:
     wxTextCtrl *text;
