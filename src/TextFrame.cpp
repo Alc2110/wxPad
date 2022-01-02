@@ -1,4 +1,5 @@
 #include <wx/fontdlg.h>
+#include <wx/clipbrd.h>
 #include "TextFrame.h"
 
 // menu item IDs
@@ -6,7 +7,8 @@ const int ID_FILE_EXIT = 1000;
 const int ID_FILE_SAVE = 1001;
 const int ID_FILE_SAVE_AS = 1002;
 const int ID_FILE_OPEN = 1003;
-const int ID_FORMAT_FONT = 2000;
+const int ID_EDIT_PASTE = 2000;
+const int ID_FORMAT_FONT = 3000;
 
 TextFrame::TextFrame()
     : wxFrame(NULL, -1, "wxPad")
@@ -25,6 +27,10 @@ TextFrame::TextFrame()
     file_menu->Append(ID_FILE_EXIT, "Exit");
     menu_bar->Append(file_menu, "File");
     // initialise edit menu
+    wxMenu *edit_menu = new wxMenu();
+    edit_menu->Append(ID_EDIT_PASTE, "Paste");
+    menu_bar->Append(edit_menu, "Edit");
+    // initialise format menu
     wxMenu *format_menu = new wxMenu();
     format_menu->Append(ID_FORMAT_FONT, "Font");
     menu_bar->Append(format_menu, "Format");
@@ -81,6 +87,19 @@ void TextFrame::OnOpen(wxCommandEvent &event)
     open_dialog->Destroy();
 }
 
+void TextFrame::OnPaste(wxCommandEvent &event)
+{
+    if (wxTheClipboard->Open())
+    {
+        // get the clipboard data
+        wxTextDataObject clipboard_data;
+        wxTheClipboard->GetData(clipboard_data);
+
+        // append the text to the main text area
+        text_area->AppendText(clipboard_data.GetText());
+    }
+}
+
 void TextFrame::OnFormatFont(wxCommandEvent &event)
 {
     // show font dialog
@@ -103,5 +122,6 @@ BEGIN_EVENT_TABLE(TextFrame, wxFrame)
 EVT_MENU(ID_FILE_EXIT, TextFrame::OnExit)
 EVT_MENU(ID_FILE_SAVE_AS, TextFrame::OnSaveAs)
 EVT_MENU(ID_FILE_OPEN, TextFrame::OnOpen)
+EVT_MENU(ID_EDIT_PASTE, TextFrame::OnPaste)
 EVT_MENU(ID_FORMAT_FONT, TextFrame::OnFormatFont)
 END_EVENT_TABLE()

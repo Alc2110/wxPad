@@ -10,6 +10,7 @@ public:
     void OnExit(wxCommandEvent &event);
     void OnSaveAs(wxCommandEvent &event);
     void OnOpen(wxCommandEvent &event);
+    void OnPaste(wxCommandEvent &event);
     void OnFormatFont(wxCommandEvent &event);
 
 private:
