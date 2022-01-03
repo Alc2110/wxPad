@@ -11,6 +11,7 @@ public:
     void OnSaveAs(wxCommandEvent &event);
     void OnOpen(wxCommandEvent &event);
     void OnPaste(wxCommandEvent &event);
+    void OnReplace(wxCommandEvent &event);
     void OnSelectAll(wxCommandEvent &event);
     void OnFormatFont(wxCommandEvent &event);
 

@@ -1,5 +1,6 @@
 #include <wx/fontdlg.h>
 #include <wx/clipbrd.h>
+#include <wx/fdrepdlg.h>
 #include "TextFrame.h"
 
 // menu item IDs
@@ -8,13 +9,15 @@ const int ID_FILE_SAVE = 1001;
 const int ID_FILE_SAVE_AS = 1002;
 const int ID_FILE_OPEN = 1003;
 const int ID_EDIT_PASTE = 2000;
-const int ID_EDIT_SELECT_ALL = 2001;
+const int ID_EDIT_REPLACE = 2001;
+const int ID_EDIT_SELECT_ALL = 2002;
 const int ID_FORMAT_FONT = 3000;
 
 TextFrame::TextFrame()
     : wxFrame(NULL, -1, "wxPad")
 {
     // set up main text area
+    // by setting the parent, responsibilty of managing the object is passed to wxWidgets itself
     text_area = new wxTextCtrl(this, -1, "Type some text here!",
                                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
 
@@ -30,6 +33,7 @@ TextFrame::TextFrame()
     // initialise edit menu
     wxMenu *edit_menu = new wxMenu();
     edit_menu->Append(ID_EDIT_PASTE, "Paste");
+    edit_menu->Append(ID_EDIT_REPLACE, "Replace");
     edit_menu->Append(ID_EDIT_SELECT_ALL, "Select All");
     menu_bar->Append(edit_menu, "Edit");
     // initialise format menu
@@ -102,6 +106,15 @@ void TextFrame::OnPaste(wxCommandEvent &event)
     }
 }
 
+void TextFrame::OnReplace(wxCommandEvent &event)
+{
+    wxFindReplaceData *find_replace_data = new wxFindReplaceData();
+    wxFindReplaceDialog *find_replace_dialog = new wxFindReplaceDialog(this, new wxFindReplaceData(), wxT("Find and Replace"), wxFR_REPLACEDIALOG);
+    find_replace_dialog->Show(true);
+
+    return;
+}
+
 void TextFrame::OnSelectAll(wxCommandEvent &event)
 {
     text_area->SetSelection(-1, -1);
@@ -130,6 +143,7 @@ EVT_MENU(ID_FILE_EXIT, TextFrame::OnExit)
 EVT_MENU(ID_FILE_SAVE_AS, TextFrame::OnSaveAs)
 EVT_MENU(ID_FILE_OPEN, TextFrame::OnOpen)
 EVT_MENU(ID_EDIT_PASTE, TextFrame::OnPaste)
+EVT_MENU(ID_EDIT_REPLACE, TextFrame::OnReplace)
 EVT_MENU(ID_EDIT_SELECT_ALL, TextFrame::OnSelectAll)
 EVT_MENU(ID_FORMAT_FONT, TextFrame::OnFormatFont)
 END_EVENT_TABLE()
