@@ -21,6 +21,8 @@ TextFrame::TextFrame()
     text_area = new wxTextCtrl(this, -1, "Type some text here!",
                                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
 
+    current_file_path = "";
+
     // set up menus
     wxMenuBar *menu_bar = new wxMenuBar();
     // initialise file menu
@@ -49,26 +51,21 @@ void TextFrame::OnExit(wxCommandEvent &event)
     Destroy();
 }
 
+void TextFrame::OnSave(wxCommandEvent &event)
+{
+    if (current_file_path.empty())
+    {
+        save_as();
+    }
+    else
+    {
+        text_area->SaveFile(current_file_path);
+    }
+}
+
 void TextFrame::OnSaveAs(wxCommandEvent &event)
 {
-    // show save dialog
-    wxFileDialog *save_dialog = new wxFileDialog(
-        this, _("Save As"), wxEmptyString, wxEmptyString,
-        _("Text files (*.txt)|*.txt|All Files (*.*)|*.*"),
-        wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
-
-    if (save_dialog->ShowModal() == wxID_OK)
-    {
-        // the user clicked "OK"
-        // save the file
-        std::string path = save_dialog->GetPath();
-        text_area->SaveFile(path);
-        // set the title to reflect the file open
-        SetTitle(wxString("Edit - ") << save_dialog->GetFilename());
-    }
-
-    // clean up
-    save_dialog->Destroy();
+    save_as();
 }
 
 void TextFrame::OnOpen(wxCommandEvent &event)
@@ -138,8 +135,32 @@ void TextFrame::OnFormatFont(wxCommandEvent &event)
     font_dialog->Destroy();
 }
 
+void TextFrame::save_as()
+{
+    // show save dialog
+    wxFileDialog *save_dialog = new wxFileDialog(
+        this, _("Save As"), wxEmptyString, wxEmptyString,
+        _("Text files (*.txt)|*.txt|All Files (*.*)|*.*"),
+        wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
+
+    if (save_dialog->ShowModal() == wxID_OK)
+    {
+        // the user clicked "OK"
+        // save the file
+        std::string path = save_dialog->GetPath();
+        text_area->SaveFile(path);
+        current_file_path = path;
+        // set the title to reflect the file open
+        SetTitle(wxString("Edit - ") << save_dialog->GetFilename());
+    }
+
+    // clean up
+    save_dialog->Destroy();
+}
+
 BEGIN_EVENT_TABLE(TextFrame, wxFrame)
 EVT_MENU(ID_FILE_EXIT, TextFrame::OnExit)
+EVT_MENU(ID_FILE_SAVE, TextFrame::OnSave)
 EVT_MENU(ID_FILE_SAVE_AS, TextFrame::OnSaveAs)
 EVT_MENU(ID_FILE_OPEN, TextFrame::OnOpen)
 EVT_MENU(ID_EDIT_PASTE, TextFrame::OnPaste)
