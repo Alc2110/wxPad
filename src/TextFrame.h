@@ -21,6 +21,7 @@ private:
     void OnReplace(wxCommandEvent &event);
     void OnSelectAll(wxCommandEvent &event);
     void OnFormatFont(wxCommandEvent &event);
+    void OnClose(wxCloseEvent &event);
 
     DECLARE_EVENT_TABLE();
 };

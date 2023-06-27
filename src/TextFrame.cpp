@@ -158,6 +158,29 @@ void TextFrame::save_as()
     save_dialog->Destroy();
 }
 
+void TextFrame::OnClose(wxCloseEvent &event)
+{
+    // show save dialog
+    wxFileDialog *save_dialog = new wxFileDialog(
+        this, _("Save As"), wxEmptyString, wxEmptyString,
+        _("Text files (*.txt)|*.txt|All Files (*.*)|*.*"),
+        wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
+
+    if (save_dialog->ShowModal() == wxID_OK)
+    {
+        // the user clicked "OK"
+        // save the file
+        std::string path = save_dialog->GetPath();
+        text_area->SaveFile(path);
+        current_file_path = path;
+        // set the title to reflect the file open
+        SetTitle(wxString("Edit - ") << save_dialog->GetFilename());
+    }
+
+    // clean up
+    save_dialog->Destroy();
+}
+
 BEGIN_EVENT_TABLE(TextFrame, wxFrame)
 EVT_MENU(ID_FILE_EXIT, TextFrame::OnExit)
 EVT_MENU(ID_FILE_SAVE, TextFrame::OnSave)
@@ -167,4 +190,5 @@ EVT_MENU(ID_EDIT_PASTE, TextFrame::OnPaste)
 EVT_MENU(ID_EDIT_REPLACE, TextFrame::OnReplace)
 EVT_MENU(ID_EDIT_SELECT_ALL, TextFrame::OnSelectAll)
 EVT_MENU(ID_FORMAT_FONT, TextFrame::OnFormatFont)
+EVT_CLOSE(TextFrame::OnClose)
 END_EVENT_TABLE()

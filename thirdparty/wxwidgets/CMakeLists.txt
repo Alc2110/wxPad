@@ -43,8 +43,7 @@ else()
         LOG_INSTALL
         1
         )
-
-
+        
     set(wxWidgets_ROOT_DIR ${STAGED_INSTALL_PREFIX})
     file(TO_NATIVE_PATH "${wxWidgets_ROOT_DIR}" wxWidgets_ROOT_DIR)
     set(wxWidgets_ROOT_DIR ${wxWidgets_ROOT_DIR} CACHE INTERNAL "wxWidgets installation dir")
